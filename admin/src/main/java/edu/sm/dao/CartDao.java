@@ -60,7 +60,7 @@ public class CartDao implements Dao<Integer, Cart> { // K는 Integer, V는 Cart�
 
     // 장바구니 삭제 메서드
     @Override
-    public boolean delete(Integer sbagId, Connection con) throws Exception {
+    public Boolean delete(Integer sbagId, Connection con) throws Exception {
         boolean isDeleted = false; // 삭제 여부 초기화
         PreparedStatement ps = null; // PreparedStatement 선언
         try {

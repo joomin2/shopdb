@@ -47,7 +47,7 @@ public class WishlistDao implements Dao<String, WishlistItem> {
     }
 
     @Override
-    public boolean delete(String userId, Connection con) throws Exception {
+    public Boolean delete(String userId, Connection con) throws Exception {
         PreparedStatement ps = null;
         try {
             ps = con.prepareStatement(Sql.deleteWishlistItem); // 수정된 SQL 쿼리 사용

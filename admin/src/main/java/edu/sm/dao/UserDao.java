@@ -67,7 +67,7 @@ public class UserDao implements Dao<String, User> {
 
     // 사용자 정보 삭제 메서드
     @Override
-    public boolean delete(String userId, Connection con) throws Exception {
+    public Boolean delete(String userId, Connection con) throws Exception {
         Boolean isDeleted = false; // 삭제 여부 초기화
         PreparedStatement ps = null; // PreparedStatement 선언
         try {

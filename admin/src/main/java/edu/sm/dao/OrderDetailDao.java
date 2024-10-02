@@ -56,7 +56,7 @@ public class OrderDetailDao implements Dao<Integer, OrderDetail> {
 
     // 주문 세부 정보 삭제 메서드
     @Override
-    public boolean delete(Integer orderDetailId, Connection con) throws Exception {
+    public Boolean delete(Integer orderDetailId, Connection con) throws Exception {
         Boolean isDeleted = false; // 삭제 여부 초기화
         PreparedStatement ps = null; // PreparedStatement 선언
         try {

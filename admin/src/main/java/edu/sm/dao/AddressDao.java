@@ -61,7 +61,7 @@ public class AddressDao implements Dao<Integer, Address> {
 
     // 주소 삭제 메서드 (주소 ID로 삭제)
     @Override
-    public boolean delete(Integer addId, Connection con) throws Exception {
+    public Boolean delete(Integer addId, Connection con) throws Exception {
         PreparedStatement ps = null;
         try {
             ps = con.prepareStatement(Sql.deleteAddress);

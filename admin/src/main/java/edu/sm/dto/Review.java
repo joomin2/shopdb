@@ -5,19 +5,22 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+//database와 동일하게..
+
 public class Review {
-    private int reviewIn; // 리뷰 ID
-    private String userId; // 사용자 ID
-    private int productId; // 제품 ID
-    private String title; // 제목
-    private String content; // 내용
-    private String img; // 이미지
-    private int score; // 점수
-    private Timestamp reviewDate; // 리뷰 날짜
+    private int review_in;
+    private String user_id;
+    private int product_id;
+    private String title;
+    private String content;
+    private String img;
+    private int score;
+    private LocalDate review_date;
+
 }

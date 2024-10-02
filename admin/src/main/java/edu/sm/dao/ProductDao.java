@@ -69,7 +69,7 @@ public class ProductDao implements Dao<Integer, Product> {
     }
 
     @Override
-    public boolean delete(Integer integer, Connection conn) throws Exception {
+    public Boolean delete(Integer integer, Connection conn) throws Exception {
         return false;
     }
 

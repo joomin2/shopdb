@@ -31,7 +31,7 @@ public class ShippingDao implements Dao<Integer, Shipping> {
     }
 
     // 주문 ID 유효성 검사 메서드
-    public boolean isOrderIdValid(Integer orderId, Connection con) throws Exception {
+    public Boolean isOrderIdValid(Integer orderId, Connection con) throws Exception {
         String sql = "SELECT COUNT(*) FROM orders WHERE order_id = ?"; // 주문 ID 확인 SQL 쿼리
         try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, orderId); // 주문 ID 설정
@@ -60,7 +60,7 @@ public class ShippingDao implements Dao<Integer, Shipping> {
 
     // 배송 정보 삭제 메서드
     @Override
-    public boolean delete(Integer shippingId, Connection con) throws Exception {
+    public Boolean delete(Integer shippingId, Connection con) throws Exception {
         String sql = Sql.deleteShipping; // SQL 쿼리 가져오기
         try (PreparedStatement ps = con.prepareStatement(sql)) { // try-with-resources 사용
             ps.setInt(1, shippingId); // 배송 ID 설정

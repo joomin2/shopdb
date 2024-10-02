@@ -60,7 +60,7 @@ public class CategoryDao implements Dao<Integer, Category> {
 
     // 카테고리 삭제 메서드
     @Override
-    public boolean delete(Integer cateno, Connection con) throws Exception {
+    public Boolean delete(Integer cateno, Connection con) throws Exception {
         Boolean isDeleted = false; // 삭제 여부 초기화
         PreparedStatement ps = null; // PreparedStatement 선언
         try {
