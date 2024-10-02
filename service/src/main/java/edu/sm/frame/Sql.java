@@ -65,7 +65,7 @@ public class Sql {
     public static final String selectOneShipping = "SELECT * FROM shipping WHERE shipping_id = ?";
     public static final String selectShipping = "SELECT * FROM shipping";
     // User 테이블 쿼리
-    public static final String insertUser = "INSERT INTO user (user_id, name, email, pwd, phoneno, gender, joined, age) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    public static final String insertUser = "INSERT INTO user (user_id, name, email, pwd, phoneno, gender, joined, age) VALUES (?, ?, ?, ?, ?, ?, sysdate(), ?)";
     public static final String updateUser = "UPDATE user SET name = ?, email = ?, pwd = ?, phoneno = ?, gender = ?, age = ? WHERE user_id = ?";
     public static final String deleteUser = "DELETE FROM user WHERE user_id = ?";
     public static final String selectOneUser = "SELECT * FROM user WHERE user_id = ?";
