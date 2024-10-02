@@ -45,7 +45,7 @@ public class MainApplication {
                         System.out.println("프로그램을 종료합니다.");
                         return;
                     default:
-                        System.out.println("잘못된 선택입니다. 다시 시도하세요.");
+                        System.out.println("잘못된 선택입니다. 다시 시도하세요");
                 }
             }
         } catch (SQLException e) {
