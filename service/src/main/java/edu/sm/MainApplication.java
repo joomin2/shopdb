@@ -1,10 +1,11 @@
 package edu.sm;
 
 import edu.sm.dao.CartDao;
-
+import edu.sm.dao.UserDao; // Assume you have a UserDao for managing user data
 import edu.sm.dto.Cart;
-
+import edu.sm.dto.User;
 import edu.sm.exception.DuplicatedIdException;
+import edu.sm.service.UserService;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -23,31 +24,85 @@ public class MainApplication {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        CartDao cartDao = new CartDao();
         Connection connection = null;
+        UserService userService = new UserService();
 
         try {
             connection = getConnection();
             System.out.println("데이터베이스에 연결되었습니다");
 
-            while (true) {
+            UserDao userDao = new UserDao();
+            String userId = null;
 
-                System.out.println("2. 장바구니 관리");
-                System.out.println("3. 종료");
+            while (true) {
+                System.out.println("1. 로그인");
+                System.out.println("2. 회원가입");
                 System.out.print("선택하세요: ");
                 int choice = scanner.nextInt();
+                scanner.nextLine(); // Consume newline
 
-                switch (choice) {
-                    case 2:
-                        manageCarts(scanner, cartDao, connection);
-                        break;
-                    case 3:
-                        System.out.println("프로그램을 종료합니다.");
-                        return;
-                    default:
-                        System.out.println("잘못된 선택입니다. 다시 시도하세요");
+                if (choice == 1) {
+                    // 로그인 기능
+                    System.out.print("User ID: ");
+                    userId = scanner.nextLine();
+                    System.out.print("Password: ");
+                    String password = scanner.nextLine();
+
+                    try {
+                        User user = userService.login(userId, password);
+                        System.out.println("로그인 성공! 환영합니다, " + user.getName() + "!");
+                        break; // Exit the login loop on success
+                    } catch (Exception e) {
+                        System.out.println("로그인 실패: " + e.getMessage());
+                    }
+
+                } else if (choice == 2) {
+                    // 회원가입 기능
+                    System.out.print("User ID: ");
+                    userId = scanner.nextLine();
+                    System.out.print("Name: ");
+                    String name = scanner.nextLine();
+                    System.out.print("Email: ");
+                    String email = scanner.nextLine();
+                    System.out.print("Password: ");
+                    String password = scanner.nextLine();
+                    System.out.print("Phone number: ");
+                    String phoneno = scanner.nextLine();
+                    System.out.print("Gender (1 for Female, 0 for Male): ");
+                    int gender = scanner.nextInt();
+                    System.out.print("Age: ");
+                    int age = scanner.nextInt();
+                    scanner.nextLine(); // Consume newline
+
+                    User newUser = User.builder()
+                            .user_id(userId)
+                            .name(name)
+                            .email(email)
+                            .pwd(password)
+                            .phoneno(phoneno)
+                            .gender(gender)
+                            .age(age)
+                            .build();
+
+                    try {
+                        userService.add(newUser);
+                        System.out.println("회원가입 성공!");
+                    } catch (DuplicatedIdException e) {
+                        System.out.println("중복된 아이디입니다: " + e.getMessage());
+                    } catch (Exception e) {
+                        System.out.println("회원가입 실패: " + e.getMessage());
+                    }
+                } else {
+                    System.out.println("잘못된 선택입니다. 다시 시도하세요.");
                 }
             }
+
+            // 장바구니 관리
+            CartDao cartDao = new CartDao();
+            while (true) {
+                manageCarts(scanner, cartDao, connection);
+            }
+
         } catch (SQLException e) {
             System.out.println("데이터베이스 오류 발생: " + e.getMessage());
         } catch (Exception e) {
@@ -63,10 +118,6 @@ public class MainApplication {
             }
         }
     }
-
-
-
-
 
     private static void manageCarts(Scanner scanner, CartDao cartDao, Connection connection) {
         while (true) {
@@ -100,7 +151,6 @@ public class MainApplication {
     }
 
     private static void addCart(Scanner scanner, CartDao cartDao, Connection connection) {
-        // 장바구니 추가 기능 구현
         System.out.print("제품 ID를 입력하세요: ");
         int productId = scanner.nextInt();
         System.out.print("수량을 입력하세요: ");
@@ -112,7 +162,7 @@ public class MainApplication {
                 .createAt(new Date(System.currentTimeMillis()))
                 .productId(productId)
                 .quantity(quantity)
-                .userId(userId) // 사용자 ID를 String으로 설정
+                .userId(userId)
                 .build();
 
         try {
@@ -126,7 +176,6 @@ public class MainApplication {
     }
 
     private static void selectCart(Scanner scanner, CartDao cartDao, Connection connection) {
-        // 장바구니 조회 기능 구현
         System.out.print("장바구니 ID를 입력하세요: ");
         int idToSelect = scanner.nextInt();
         try {
@@ -142,7 +191,6 @@ public class MainApplication {
     }
 
     private static void updateCart(Scanner scanner, CartDao cartDao, Connection connection) {
-        // 장바구니 수정 기능 구현
         System.out.print("수정할 장바구니 ID를 입력하세요: ");
         int idToUpdate = scanner.nextInt();
         System.out.print("수정할 수량을 입력하세요: ");
@@ -162,7 +210,6 @@ public class MainApplication {
     }
 
     private static void deleteCart(Scanner scanner, CartDao cartDao, Connection connection) {
-        // 장바구니 삭제 기능 구현
         System.out.print("삭제할 장바구니 ID를 입력하세요: ");
         int idToDelete = scanner.nextInt();
         try {
