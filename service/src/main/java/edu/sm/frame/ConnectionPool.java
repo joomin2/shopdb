@@ -10,13 +10,13 @@ import java.util.ResourceBundle;
 
 public class ConnectionPool {
 
-    private List<Connection> connectionPool;
-    private List<Connection> usedConnections = new ArrayList<>();//사용하고있는 ArrayList
-    private static int INITIAL_POOL_SIZE = 3; //3개의 connection을 만들고,사용하고 반납하고를 반복.
+    private static List<Connection> connectionPool;
+    private static List<Connection> usedConnections = new ArrayList<>();
+    private static int INITIAL_POOL_SIZE = 3;
     static ResourceBundle rb;
     static {
         rb = null;
-        rb = ResourceBundle.getBundle("mysql", Locale.KOREA);//mysql이라는 이름의 properties파일 읽음.
+        rb = ResourceBundle.getBundle("mysql", Locale.KOREA);
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             System.out.println("OK");
@@ -32,7 +32,7 @@ public class ConnectionPool {
         String user = rb.getString("user");
         String password = rb.getString("password");
 
-        List<Connection> pool = new ArrayList<>(INITIAL_POOL_SIZE);//create에 의해 connection 3개가 만들어짐.
+        List<Connection> pool = new ArrayList<>(INITIAL_POOL_SIZE);
         for (int i = 0; i < INITIAL_POOL_SIZE; i++) {
             pool.add(createConnection(url, user, password));
         }
@@ -44,14 +44,14 @@ public class ConnectionPool {
     }
 
 
-    public Connection getConnection() {// connecton을 하나 꺼내서 return
+    public static Connection getConnection() {
         Connection connection = connectionPool
                 .remove(connectionPool.size() - 1);
         usedConnections.add(connection);
         return connection;
     }
 
-    public boolean releaseConnection(Connection connection) {//쓰고나서 반납.
+    public boolean releaseConnection(Connection connection) {
         connectionPool.add(connection);
         return usedConnections.remove(connection);
     }
