@@ -72,9 +72,9 @@ public class Sql {
     public static final String selectUser = "SELECT * FROM user";
 
     // WishlistItem 테이블 쿼리
-    public static final String insertWishlistItem = "INSERT INTO wishlist_item (user_id, product_id, created_at) VALUES (?, ?, ?)";
-    public static final String updateWishlistItem = "UPDATE wishlist_item SET created_at = ? WHERE user_id = ? AND product_id = ?";
-    public static final String deleteWishlistItem = "DELETE FROM wishlist_item WHERE user_id = ? AND product_id = ?";
-    public static final String selectOneWishlistItem = "SELECT * FROM wishlist_item WHERE user_id = ? AND product_id = ?";
-    public static final String selectWishlistItem = "SELECT * FROM wishlist_item";
+    public static final String insertWishlist = "INSERT INTO wishlist_item (user_id, product_id, created_at) VALUES (?, ?, ?)";
+    public static final String updateWishlist = "UPDATE wishlist_item SET created_at = ? WHERE user_id = ? AND product_id = ?";
+    public static final String deleteWishlist = "DELETE FROM wishlist_item WHERE user_id = ? AND product_id = ?";
+    public static final String selectOneWishlist = "SELECT * FROM wishlist_item WHERE user_id = ? AND product_id = ?";
+    public static final String selectWishlist = "SELECT * FROM wishlist_item";
 }
