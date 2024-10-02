@@ -9,6 +9,7 @@ public class Main {
         System.out.printf("Hello and welcome!");
 
         System.out.println("1조 팀플 관리자 메인클래스");
+        System.out.println("JM브랜치에서 작업한 한줄");
 
         }
     }
