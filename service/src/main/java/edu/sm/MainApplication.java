@@ -28,7 +28,7 @@ public class MainApplication {
 
         try {
             connection = getConnection();
-            System.out.println("데이터베이스에 연결되었습니다.");
+            System.out.println("데이터베이스에 연결되었습니다");
 
             while (true) {
 
