@@ -5,6 +5,6 @@ package edu.sm;
 public class Main {
     public static void main(String[] args) {
 
-        System.out.println("1팀 사용자 모드 메인 모듈 클래스");
+        System.out.println("1팀 사용자 모드 메인 모듈 클래스2");
     }
 }
