@@ -80,4 +80,8 @@ public class Sql {
     public static final String deleteWishlistItem = "DELETE FROM wishlist_item WHERE user_id = ? AND product_id = ?";
     public static final String selectOneWishlistItem = "SELECT * FROM wishlist_item WHERE user_id = ? AND product_id = ?";
     public static final String selectWishlistItem = "SELECT * FROM wishlist_item";
+
+    public static final String SELECT_SALES_BY_AGE_GROUP = "SELECT CASE " + "WHEN u.age BETWEEN 0 AND 19 THEN '0-19세' " + "WHEN u.age BETWEEN 20 AND 29 THEN '20-29세' " + "WHEN u.age BETWEEN 30 AND 39 THEN '30-39세' " +"WHEN u.age BETWEEN 40 AND 49 THEN '40-49세' " +"WHEN u.age BETWEEN 50 AND 59 THEN '50-59세' " + "ELSE '60세 이상' END AS age_group, " + "SUM(o.total_price) AS total_sales " + "FROM users u " + "JOIN orders o ON u.user_id = o.user_id " +"GROUP BY age_group";
+
+    public static final String SELECT_SALES_BY_GENDER = "SELECT CASE " + "WHEN u.gender = 0 THEN '남성' " + "ELSE '여성' END AS gender, " + "SUM(o.total_price) AS total_sales " + "FROM users u " + "JOIN orders o ON u.user_id = o.user_id " + "GROUP BY gender";
 }
