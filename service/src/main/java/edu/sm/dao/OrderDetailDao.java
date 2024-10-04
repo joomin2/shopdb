@@ -1,16 +1,13 @@
 package edu.sm.dao;
 
-import edu.sm.dto.OrderDetail;
-import edu.sm.exception.DuplicatedIdException;
-import edu.sm.frame.Dao;
-import edu.sm.frame.Sql;
+import edu.sm.dto.OrderDetail; // OrderDetail DTO 임포트
+import edu.sm.exception.DuplicatedIdException; // 중복 ID 예외 처리 클래스 임포트
+import edu.sm.frame.Dao; // Dao 인터페이스 임포트
+import edu.sm.frame.Sql; // SQL 쿼리 정의를 위한 클래스 임포트
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLIntegrityConstraintViolationException;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.*;
+import java.util.ArrayList; // 리스트를 사용하기 위한 ArrayList 클래스 임포트
+import java.util.List; // 리스트를 위한 인터페이스 임포트
 
 public class OrderDetailDao implements Dao<Integer, OrderDetail> {
 

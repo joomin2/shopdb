@@ -1,13 +1,14 @@
 package edu.sm.service;
 
-import edu.sm.dao.CategoryDao;
-import edu.sm.dto.Category;
-import edu.sm.exception.DuplicatedIdException;
-import edu.sm.exception.NotFoundException;
+import edu.sm.dao.CategoryDao; // CategoryDao 임포트
+import edu.sm.dto.Category; // Category DTO 임포트
+import edu.sm.exception.DuplicatedIdException; // 중복 ID 예외 처리 클래스 임포트
+import edu.sm.exception.NotFoundException; // 찾을 수 없는 예외 처리 클래스 임포트
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.List;
+import java.sql.Connection; // JDBC 연결을 위한 클래스 임포트
+import java.sql.PreparedStatement;
+import java.sql.SQLException; // SQL 예외 클래스 임포트
+import java.util.List; // 리스트를 위한 인터페이스 임포트
 
 public class CategoryService {
 

@@ -1,8 +1,8 @@
 package edu.sm.service;
 
-import edu.sm.dao.PaymentDao;
-import edu.sm.dto.Payment;
-import edu.sm.exception.DuplicatedIdException;
+import edu.sm.dao.PaymentDao; // PaymentDao 임포트
+import edu.sm.dto.Payment; // Payment DTO 임포트
+import edu.sm.exception.DuplicatedIdException; // 중복 ID 예외 처리 클래스 임포트
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -61,4 +61,9 @@ public class PaymentService {
             throw new Exception("결제 목록 조회 실패", e); // SQL 예외 발생
         }
     }
+    // payment_id 중복 체크 메서드
+    public boolean existsById(int paymentId, Connection con) throws Exception {
+        return paymentDao.existsById(paymentId, con); // PaymentDao의 existsById 메서드 호출
+    }
+
 }

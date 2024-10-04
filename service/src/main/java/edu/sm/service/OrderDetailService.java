@@ -1,11 +1,15 @@
 package edu.sm.service;
 
-import edu.sm.dao.OrderDetailDao;
-import edu.sm.dto.OrderDetail;
-import edu.sm.frame.ConnectionPool;
+import edu.sm.dao.OrderDetailDao; // OrderDetailDao 클래스 임포트
+import edu.sm.dto.OrderDetail; // OrderDetail DTO 임포트
+import edu.sm.frame.ConnectionPool; // ConnectionPool 클래스 임포트
+import edu.sm.frame.Sql;
 
-import java.sql.Connection;
-import java.util.List;
+import java.sql.Connection; // JDBC 연결을 위한 클래스 임포트
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List; // 리스트를 위한 인터페이스 임포트
 
 public class OrderDetailService {
     private OrderDetailDao orderDetailDao; // OrderDetailDao 인스턴스 변수
@@ -71,4 +75,16 @@ public class OrderDetailService {
             throw e; // 예외를 다시 던짐
         }
     }
+
+    public boolean existsById(int odetailId, Connection con) throws SQLException {
+        try (PreparedStatement ps = con.prepareStatement(Sql.existsById)) {
+            ps.setInt(1, odetailId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // 0보다 크면 존재함
+            }
+        }
+        return false; // 존재하지 않음
+    }
+
 }

@@ -13,6 +13,6 @@ public class Payment {
     private int payment_id;     // payment_id
     private java.sql.Date payment_date; // payment_date
     private String payment_method;   // payment_method
-    private int amount;   // amount
+    private int payment_price;   // payment_price
     private int order_id;        // order_id
 }

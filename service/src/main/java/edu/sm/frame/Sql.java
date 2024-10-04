@@ -28,6 +28,7 @@ public class Sql {
     public static final String deleteOrderDetail = "DELETE FROM orderdetail WHERE odetail_id = ?";
     public static final String selectOneOrderDetail = "SELECT * FROM orderdetail WHERE odetail_id = ?";
     public static final String selectOrderDetail = "SELECT * FROM orderdetail";
+    public static final String existsById = "SELECT COUNT(*) FROM orderdetail WHERE odetail_id = ?";
 
     // Orders 테이블 쿼리
     public static final String insertOrder = "INSERT INTO orders (order_date, status, total_price, user_id) VALUES (?, ?, ?, ?)";
@@ -42,6 +43,7 @@ public class Sql {
     public static final String deletePayment = "DELETE FROM payment WHERE payment_id = ?";
     public static final String selectOnePayment = "SELECT * FROM payment WHERE payment_id = ?";
     public static final String selectPayment = "SELECT * FROM payment";
+    public static final String EXISTS_PAYMENT_ID = "SELECT COUNT(*) FROM payment WHERE payment_id = ?";
 
     // Product 테이블 쿼리
     public static final String insertProduct = "INSERT INTO product (product_name, product_price, product_img, cateno, product_date) VALUES (?, ?, ?, ?, ?)";
