@@ -2,8 +2,10 @@ package edu.sm;
 
 import edu.sm.dao.CartDao;
 import edu.sm.dao.UserDao; // Assume you have a UserDao for managing user data
+import edu.sm.dao.WishlistDao;
 import edu.sm.dto.Cart;
 import edu.sm.dto.User;
+import edu.sm.dto.Wishlist;
 import edu.sm.exception.DuplicatedIdException;
 import edu.sm.service.UserService;
 
@@ -32,6 +34,7 @@ public class MainApplication {
             System.out.println("데이터베이스에 연결되었습니다");
 
             UserDao userDao = new UserDao();
+            WishlistDao wishlistDao = new WishlistDao();
             String userId = null;
 
             while (true) {
@@ -99,8 +102,23 @@ public class MainApplication {
 
             // 장바구니 관리
             CartDao cartDao = new CartDao();
+            wishlistDao = new WishlistDao();
             while (true) {
-                manageCarts(scanner, cartDao, connection);
+                System.out.println("1. 장바구니 관리");
+                System.out.println("2. 위시리스트 관리");
+                System.out.println("3. 종료");
+                System.out.print("선택하세요: ");
+                int mainChoice = scanner.nextInt();
+
+                if (mainChoice == 1) {
+                    manageCarts(scanner, cartDao, connection);
+                } else if (mainChoice == 2) {
+                    manageWishlists(scanner, wishlistDao, connection);
+                } else if (mainChoice == 3) {
+                    break;
+                } else {
+                    System.out.println("잘못된 선택입니다. 다시 시도하세요.");
+                }
             }
 
         } catch (SQLException e) {
@@ -223,4 +241,108 @@ public class MainApplication {
             System.out.println("장바구니 삭제 실패: " + e.getMessage());
         }
     }
+
+    // 위시리스트 관리 추가
+    private static void manageWishlists(Scanner scanner, WishlistDao wishlistDao, Connection connection) {
+        while (true) {
+            System.out.println("1. 위시리스트 추가");
+            System.out.println("2. 위시리스트 조회");
+            System.out.println("3. 위시리스트 수정");
+            System.out.println("4. 위시리스트 삭제");
+            System.out.println("5. 돌아가기");
+            System.out.print("선택하세요: ");
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    addWishlist(scanner, wishlistDao, connection);
+                    break;
+                case 2:
+                    selectWishlist(scanner, wishlistDao, connection);
+                    break;
+                case 3:
+                    updateWishlist(scanner, wishlistDao, connection);
+                    break;
+                case 4:
+                    deleteWishlist(scanner, wishlistDao, connection);
+                    break;
+                case 5:
+                    return;
+                default:
+                    System.out.println("잘못된 선택입니다. 다시 시도하세요.");
+            }
+        }
+    }
+
+    private static void addWishlist(Scanner scanner, WishlistDao wishlistDao, Connection connection) {
+        System.out.print("제품 ID를 입력하세요: ");
+        int productId = scanner.nextInt();
+        System.out.print("사용자 ID를 입력하세요: ");
+        String userId = scanner.next();
+
+        Wishlist wishlist = Wishlist.builder()
+                .user_id(userId)
+                .product_id(productId)
+                .build();
+
+        try {
+            wishlistDao.insert(wishlist, connection);
+            System.out.println("위시리스트에 성공적으로 추가되었습니다.");
+        } catch (DuplicatedIdException e) {
+            System.out.println("중복된 위시리스트 항목입니다: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("위시리스트 추가 실패: " + e.getMessage());
+        }
+    }
+
+    private static void selectWishlist(Scanner scanner, WishlistDao wishlistDao, Connection connection) {
+        System.out.print("위시리스트 항목의 사용자 ID를 입력하세요: ");
+        String userId = scanner.next();
+        try {
+            Wishlist wishlist = wishlistDao.select(userId, connection);
+            if (wishlist != null) {
+                System.out.println("위시리스트 정보: " + wishlist);
+            } else {
+                System.out.println(userId + "의 위시리스트를 찾을 수 없습니다.");
+            }
+        } catch (Exception e) {
+            System.out.println("위시리스트 조회 실패: " + e.getMessage());
+        }
+    }
+
+    private static void updateWishlist(Scanner scanner, WishlistDao wishlistDao, Connection connection) {
+        System.out.print("수정할 사용자 ID를 입력하세요: ");
+        String userId = scanner.next();
+        System.out.print("새로운 제품 ID를 입력하세요: ");
+        int newProductId = scanner.nextInt();
+
+        Wishlist wishlist = Wishlist.builder()
+                .user_id(userId)
+                .product_id(newProductId)
+                .build();
+
+        try {
+            wishlistDao.update(wishlist, connection);
+            System.out.println("위시리스트가 성공적으로 수정되었습니다.");
+        } catch (Exception e) {
+            System.out.println("위시리스트 수정 실패: " + e.getMessage());
+        }
+    }
+
+    private static void deleteWishlist(Scanner scanner, WishlistDao wishlistDao, Connection connection) {
+        System.out.print("삭제할 사용자 ID를 입력하세요: ");
+        String userId = scanner.next();
+        try {
+            boolean isDeleted = wishlistDao.delete(userId, connection);
+            if (isDeleted) {
+                System.out.println("위시리스트 항목이 성공적으로 삭제되었습니다.");
+            } else {
+                System.out.println("위시리스트 항목 삭제 실패");
+            }
+        } catch (Exception e) {
+            System.out.println("위시리스트 삭제 실패: " + e.getMessage());
+        }
+    }
+
+
 }

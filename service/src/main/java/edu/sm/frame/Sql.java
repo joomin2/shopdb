@@ -75,6 +75,6 @@ public class Sql {
     public static final String insertWishlist = "INSERT INTO wishlist_item (user_id, product_id, created_at) VALUES (?, ?, ?)";
     public static final String updateWishlist = "UPDATE wishlist_item SET created_at = ? WHERE user_id = ? AND product_id = ?";
     public static final String deleteWishlist = "DELETE FROM wishlist_item WHERE user_id = ? AND product_id = ?";
-    public static final String selectOneWishlist = "SELECT * FROM wishlist_item WHERE user_id = ? AND product_id = ?";
+    public static final String selectOneWishlist = "SELECT * FROM wishlist_item WHERE user_id = ?";
     public static final String selectWishlist = "SELECT * FROM wishlist_item";
 }
