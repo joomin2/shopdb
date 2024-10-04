@@ -34,6 +34,32 @@ public class OrdersDao implements Dao<Integer, Orders> {
         return order; // 추가한 주문 반환
     }
 
+    // 월별 판매 통계 조회 메서드
+    public List<String[]> selectMonthlySales(Connection con) throws Exception {
+        List<String[]> monthlySales = new ArrayList<>(); // 월별 판매 통계 리스트 초기화
+        PreparedStatement ps = null; // PreparedStatement 선언
+        ResultSet rs = null; // ResultSet 선언
+        try {
+            ps = con.prepareStatement("SELECT DATE_FORMAT(order_date, '%Y-%m') AS month, SUM(total_price) AS total_sales FROM orders GROUP BY month ORDER BY month"); // 월별 판매 통계 쿼리 준비
+            rs = ps.executeQuery(); // 쿼리 실행
+            while (rs.next()) { // 결과가 있는 동안 반복
+                String month = rs.getString("month"); // 월 정보 가져오기
+                int totalSales = rs.getInt("total_sales"); // 총 판매 금액 가져오기
+                monthlySales.add(new String[]{month, String.valueOf(totalSales)}); // 리스트에 추가
+            }
+        } catch (Exception e) {
+            throw e; // 예외 발생
+        } finally {
+            if (ps != null) {
+                ps.close(); // PreparedStatement 닫기
+            }
+            if (rs != null) {
+                rs.close(); // ResultSet 닫기
+            }
+        }
+        return monthlySales; // 월별 판매 통계 리스트 반환
+    }
+
     // 주문 업데이트 메서드
     @Override
     public Orders update(Orders order, Connection con) throws Exception {

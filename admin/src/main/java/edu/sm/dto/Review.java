@@ -23,4 +23,5 @@ public class Review {
     private int score;
     private LocalDate review_date;
 
+
 }
