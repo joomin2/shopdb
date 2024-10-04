@@ -1,12 +1,15 @@
 package edu.sm;
 
 import edu.sm.dao.CartDao;
+import edu.sm.dao.OrdersDao;
 import edu.sm.dao.UserDao; // Assume you have a UserDao for managing user data
 import edu.sm.dao.WishlistDao;
 import edu.sm.dto.Cart;
+import edu.sm.dto.Orders;
 import edu.sm.dto.User;
 import edu.sm.dto.Wishlist;
 import edu.sm.exception.DuplicatedIdException;
+import edu.sm.service.OrdersService;
 import edu.sm.service.UserService;
 
 import java.sql.Connection;
@@ -35,6 +38,7 @@ public class MainApplication {
 
             UserDao userDao = new UserDao();
             WishlistDao wishlistDao = new WishlistDao();
+            OrdersDao ordersDao = new OrdersDao();
             String userId = null;
 
             while (true) {
@@ -103,10 +107,12 @@ public class MainApplication {
             // 장바구니 관리
             CartDao cartDao = new CartDao();
             wishlistDao = new WishlistDao();
+            ordersDao = new OrdersDao();
             while (true) {
                 System.out.println("1. 장바구니 관리");
                 System.out.println("2. 위시리스트 관리");
-                System.out.println("3. 종료");
+                System.out.println("3. 주문 관리");
+                System.out.println("4. 종료");
                 System.out.print("선택하세요: ");
                 int mainChoice = scanner.nextInt();
 
@@ -115,6 +121,8 @@ public class MainApplication {
                 } else if (mainChoice == 2) {
                     manageWishlists(scanner, wishlistDao, connection);
                 } else if (mainChoice == 3) {
+                    manageOrders(scanner, ordersDao, connection);
+                } else if (mainChoice == 4) {
                     break;
                 } else {
                     System.out.println("잘못된 선택입니다. 다시 시도하세요.");
@@ -345,4 +353,62 @@ public class MainApplication {
     }
 
 
+    private static void manageOrders(Scanner scanner, OrdersDao ordersDao, Connection connection) {
+        while (true) {
+            System.out.println("1. 주문 조회");
+            System.out.println("2. 주문 삭제");
+            System.out.println("3. 돌아가기");
+            System.out.print("선택하세요: ");
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    selectOrder(scanner, ordersDao, connection);
+                    break;
+
+                case 4:
+                    deleteOrder(scanner, ordersDao, connection);
+                    break;
+                case 3:
+                    return;
+                default:
+                    System.out.println("잘못된 선택입니다. 다시 시도하세요.");
+            }
+        }
+    }
+
+
+
+    private static void selectOrder(Scanner scanner, OrdersDao ordersDao, Connection connection) {
+        System.out.print("주문 ID를 입력하세요: ");
+        Integer orderId = Integer.valueOf(scanner.next());
+        try {
+            Orders orders = ordersDao.select(orderId, connection);
+            if (orders != null) {
+                System.out.println("주문 정보: " + orders);
+            } else {
+                System.out.println(orderId + "에 해당하는 주문 정보를 찾을 수 없습니다.");
+            }
+        } catch (Exception e) {
+            System.out.println("주문 조회 실패: " + e.getMessage());
+        }
+    }
+
+
+
+
+    private static void deleteOrder(Scanner scanner, OrdersDao ordersDao, Connection connection) {
+        System.out.print("삭제할 주문 ID를 입력하세요: ");
+        int orderId = scanner.nextInt();
+        try {
+            boolean isDeleted = ordersDao.delete(orderId, connection);
+            if (isDeleted) {
+                System.out.println("주문이 성공적으로 삭제되었습니다.");
+            } else {
+                System.out.println("ID " + orderId + "에 해당하는 주문을 찾을 수 없습니다.");
+            }
+        } catch (Exception e) {
+            System.out.println("주문 삭제 실패: " + e.getMessage());
+        }
+    }
 }
