@@ -1,0 +1,144 @@
+package edu.sm.dao;
+
+import edu.sm.dto.OrderDetail;
+import edu.sm.exception.DuplicatedIdException;
+import edu.sm.frame.Dao;
+import edu.sm.frame.Sql;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class OrderDetailDao implements Dao<Integer, OrderDetail> {
+
+    // 주문 세부 정보 추가 메서드
+    @Override
+    public OrderDetail insert(OrderDetail orderDetail, Connection con) throws Exception {
+        PreparedStatement ps = null; // PreparedStatement 선언
+        try {
+            ps = con.prepareStatement(Sql.insertOrderDetail); // SQL 쿼리 준비
+            ps.setInt(1, orderDetail.getOdetail_id()); // ID 설정
+            ps.setInt(2, orderDetail.getPrice()); // 가격 설정
+            ps.setInt(3, orderDetail.getOrder_id()); // 주문 ID 설정
+            ps.setInt(4, orderDetail.getProduct_id()); // 제품 ID 설정
+            ps.setInt(5, orderDetail.getOdetail_quantity()); // 수량 설정
+            ps.executeUpdate(); // 쿼리 실행
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new DuplicatedIdException("EX0002"); // 중복 ID 예외 발생
+        } catch (Exception e) {
+            throw e; // 다른 예외 발생
+        } finally {
+            if (ps != null) {
+                ps.close(); // PreparedStatement 닫기
+            }
+        }
+        return orderDetail; // 추가한 주문 세부 정보 반환
+    }
+
+    // 주문 세부 정보 업데이트 메서드
+    @Override
+    public OrderDetail update(OrderDetail orderDetail, Connection con) throws Exception {
+        PreparedStatement ps = null; // PreparedStatement 선언
+        try {
+            ps = con.prepareStatement(Sql.updateOrderDetail); // SQL 쿼리 준비
+            ps.setInt(1, orderDetail.getOdetail_quantity()); // 수량 설정
+            ps.setInt(2, orderDetail.getPrice()); // 가격 설정
+            ps.setInt(3, orderDetail.getOdetail_id()); // 주문 세부 정보 ID 설정
+            ps.executeUpdate(); // 쿼리 실행
+        } catch (Exception e) {
+            throw e; // 예외 발생
+        } finally {
+            if (ps != null) {
+                ps.close(); // PreparedStatement 닫기
+            }
+        }
+        return orderDetail; // 업데이트한 주문 세부 정보 반환
+    }
+
+    // 주문 세부 정보 삭제 메서드
+    @Override
+    public boolean delete(Integer orderDetailId, Connection con) throws Exception {
+        Boolean isDeleted = false; // 삭제 여부 초기화
+        PreparedStatement ps = null; // PreparedStatement 선언
+        try {
+            ps = con.prepareStatement(Sql.deleteOrderDetail); // SQL 쿼리 준비
+            ps.setInt(1, orderDetailId); // 주문 세부 정보 ID 설정
+            int result = ps.executeUpdate(); // 쿼리 실행
+            if (result == 1) {
+                isDeleted = true; // 삭제 성공
+            }
+        } catch (Exception e) {
+            throw e; // 예외 발생
+        } finally {
+            if (ps != null) {
+                ps.close(); // PreparedStatement 닫기
+            }
+        }
+        return isDeleted; // 삭제 여부 반환
+    }
+
+    // 특정 주문 세부 정보 조회 메서드
+    @Override
+    public OrderDetail select(Integer orderDetailId, Connection con) throws Exception {
+        PreparedStatement ps = null; // PreparedStatement 선언
+        ResultSet rs = null; // ResultSet 선언
+        OrderDetail orderDetail = null; // 주문 세부 정보 객체 초기화
+        try {
+            ps = con.prepareStatement(Sql.selectOneOrderDetail); // SQL 쿼리 준비
+            ps.setInt(1, orderDetailId); // 주문 세부 정보 ID 설정
+            rs = ps.executeQuery(); // 쿼리 실행
+            if (rs.next()) { // 결과가 있을 경우
+                orderDetail = new OrderDetail(); // 주문 세부 정보 객체 생성
+                orderDetail.setOdetail_id(rs.getInt("odetail_id")); // 주문 세부 정보 ID 설정
+                orderDetail.setOrder_id(rs.getInt("order_id")); // 주문 ID 설정
+                orderDetail.setProduct_id(rs.getInt("product_id")); // 제품 ID 설정
+                orderDetail.setOdetail_quantity(rs.getInt("odetail_quantity")); // 수량 설정
+                orderDetail.setPrice(rs.getInt("price")); // 가격 설정
+            }
+        } catch (Exception e) {
+            throw e; // 예외 발생
+        } finally {
+            if (ps != null) {
+                ps.close(); // PreparedStatement 닫기
+            }
+            if (rs != null) {
+                rs.close(); // ResultSet 닫기
+            }
+        }
+        return orderDetail; // 조회한 주문 세부 정보 반환
+    }
+
+    // 모든 주문 세부 정보 조회 메서드
+    @Override
+    public List<OrderDetail> select(Connection con) throws Exception {
+        List<OrderDetail> orderDetailList = new ArrayList<>(); // 주문 세부 정보 리스트 초기화
+        PreparedStatement ps = null; // PreparedStatement 선언
+        ResultSet rs = null; // ResultSet 선언
+        try {
+            ps = con.prepareStatement(Sql.selectOrderDetail); // SQL 쿼리 준비
+            rs = ps.executeQuery(); // 쿼리 실행
+            while (rs.next()) { // 결과가 있는 동안 반복
+                OrderDetail orderDetail = new OrderDetail(); // 주문 세부 정보 객체 생성
+                orderDetail.setOdetail_id(rs.getInt("odetail_id")); // 주문 세부 정보 ID 설정
+                orderDetail.setOrder_id(rs.getInt("order_id")); // 주문 ID 설정
+                orderDetail.setProduct_id(rs.getInt("product_id")); // 제품 ID 설정
+                orderDetail.setOdetail_quantity(rs.getInt("odetail_quantity")); // 수량 설정
+                orderDetail.setPrice(rs.getInt("price")); // 가격 설정
+                orderDetailList.add(orderDetail); // 리스트에 추가
+            }
+        } catch (Exception e) {
+            throw e; // 예외 발생
+        } finally {
+            if (ps != null) {
+                ps.close(); // PreparedStatement 닫기
+            }
+            if (rs != null) {
+                rs.close(); // ResultSet 닫기
+            }
+        }
+        return orderDetailList; // 주문 세부 정보 리스트 반환
+    }
+}
