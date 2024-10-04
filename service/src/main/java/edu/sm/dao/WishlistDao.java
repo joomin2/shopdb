@@ -50,6 +50,7 @@ public class WishlistDao implements Dao<String, Wishlist> {
             ps.setInt(1, wishlist.getProduct_id());
             ps.setString(2, wishlist.getUser_id());
 
+
             ps.executeUpdate();
         }catch(Exception e) {
             throw e;
