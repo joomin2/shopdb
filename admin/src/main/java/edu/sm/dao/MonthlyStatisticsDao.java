@@ -7,21 +7,21 @@ import java.sql.SQLException;
 
 import edu.sm.frame.ConnectionPool;
 
-public class GenderStatisticsDao {
-    // 성별에 따른 판매량 통계 조회 메소드
-    public void viewSalesByGender() {
-        String sql = "SELECT gender, SUM(amount) AS total_sales " +
-                "FROM orders JOIN user ON orders.user_id = user.user_id GROUP BY gender";
+public class MonthlyStatisticsDao {
+    // 월별 판매량 통계 조회 메소드
+    public void viewMonthlySales() {
+        String sql = "SELECT MONTH(order_date) AS month, SUM(amount) AS total_sales " +
+                "FROM orders GROUP BY MONTH(order_date)";
 
         try (Connection conn = ConnectionPool.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
 
-            System.out.println("=== 성별에 따른 판매량 통계 ===");
+            System.out.println("=== 월별 판매량 통계 ===");
             while (rs.next()) {
-                int gender = rs.getInt("gender");
+                int month = rs.getInt("month");
                 double totalSales = rs.getDouble("total_sales");
-                System.out.printf("성별: %s, 총 판매량: %.2f\n", gender == 0 ? "남성" : "여성", totalSales);
+                System.out.printf("월: %d, 총 판매량: %.2f\n", month, totalSales);
             }
         } catch (SQLException e) {
             e.printStackTrace();

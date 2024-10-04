@@ -12,9 +12,10 @@ import edu.sm.user.UserSelectOne;
 import edu.sm.review.ReviewSelect; // ReviewSelect 클래스 추가
 import edu.sm.review.ReviewSelectOne; // ReviewSelectOne 클래스 추가
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import edu.sm.statics.CategoryPurchaseStatics; // 카테고리별 구매 통계 클래스 임포트
+import edu.sm.statics.CategorySalesStatics; // 카테고리별 판매 통계 클래스 임포트
+import edu.sm.statics.MontlyStatics; // 월별 매출 통계 클래스 임포트
+
 import java.util.Scanner;
 
 public class Main {
@@ -172,20 +173,29 @@ public class Main {
     private static void manageStatistics() {
         boolean isStatsRunning = true;
 
+        // 통계 클래스 인스턴스 생성
+        CategoryPurchaseStatics categoryPurchaseStatics = new CategoryPurchaseStatics();
+        CategorySalesStatics categorySalesStatics = new CategorySalesStatics();
+        MontlyStatics montlyStatics = new MontlyStatics();
+
         while (isStatsRunning) {
             System.out.println("=== 통계 관리 ===");
-            System.out.println("1. 성별 통계 조회");
-            System.out.println("2. 연령대 통계 조회");
+            System.out.println("1. 카테고리별 구매 통계 조회");
+            System.out.println("2. 카테고리별 판매 통계 조회");
+            System.out.println("3. 월별 매출 통계 조회");
             System.out.print("0. 뒤로가기\n선택: ");
             int choice = scanner.nextInt();
             scanner.nextLine(); // 버퍼 처리
 
             switch (choice) {
                 case 1:
-                    viewGenderStatistics();  // 성별 통계 조회
+                    categoryPurchaseStatics.printCategoryPurchases(); // 카테고리별 구매 통계 출력
                     break;
                 case 2:
-                    viewAgeStatistics();  // 연령대 통계 조회
+                    categorySalesStatics.printCategorySales(); // 카테고리별 판매 통계 출력
+                    break;
+                case 3:
+                    montlyStatics.printMonthlySales(); // 월별 매출 통계 출력
                     break;
                 case 0:
                     System.out.println("이전 메뉴로 돌아갑니다.");
@@ -194,51 +204,6 @@ public class Main {
                 default:
                     System.out.println("잘못된 선택입니다.");
             }
-        }
-    }
-
-    // 성별 통계 조회
-    private static void viewGenderStatistics() {
-        String query = "SELECT gender, COUNT(*) AS count FROM users GROUP BY gender";
-        try (Connection conn = DatabaseConnection.getConnection(); // 데이터베이스 연결
-             PreparedStatement pstmt = conn.prepareStatement(query);
-             ResultSet rs = pstmt.executeQuery()) {
-
-            System.out.println("=== 성별 통계 ===");
-            while (rs.next()) {
-                String gender = rs.getInt("gender") == 0 ? "남성" : "여성"; // 0이면 남성, 1이면 여성
-                int count = rs.getInt("count");
-                System.out.println(gender + ": " + count + "명");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    // 연령대 통계 조회
-    private static void viewAgeStatistics() {
-        String query = "SELECT CASE " +
-                "WHEN age BETWEEN 0 AND 19 THEN '0-19세' " +
-                "WHEN age BETWEEN 20 AND 29 THEN '20-29세' " +
-                "WHEN age BETWEEN 30 AND 39 THEN '30-39세' " +
-                "WHEN age BETWEEN 40 AND 49 THEN '40-49세' " +
-                "WHEN age BETWEEN 50 AND 59 THEN '50-59세' " +
-                "ELSE '60세 이상' END AS age_group, " +
-                "COUNT(*) AS count " +
-                "FROM users GROUP BY age_group";
-
-        try (Connection conn = DatabaseConnection.getConnection(); // 데이터베이스 연결
-             PreparedStatement pstmt = conn.prepareStatement(query);
-             ResultSet rs = pstmt.executeQuery()) {
-
-            System.out.println("=== 연령대 통계 ===");
-            while (rs.next()) {
-                String ageGroup = rs.getString("age_group");
-                int count = rs.getInt("count");
-                System.out.println(ageGroup + ": " + count + "명");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }
