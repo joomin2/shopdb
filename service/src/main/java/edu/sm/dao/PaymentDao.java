@@ -1,7 +1,7 @@
 package edu.sm.dao;
 
 import edu.sm.dto.Payment; // Payment DTO 임포트
-import edu.sm.dto.WishlistItem;
+import edu.sm.dto.Wishlist;
 import edu.sm.exception.DuplicatedIdException; // 중복 ID 예외 처리 클래스 임포트
 import edu.sm.frame.Dao; // Dao 인터페이스 임포트
 import edu.sm.frame.Sql; // SQL 쿼리 정의를 위한 클래스 임포트
@@ -67,7 +67,7 @@ public class PaymentDao implements Dao<Integer, Payment> {
 
     // 결제 삭제 메서드
     @Override
-    public boolean delete(Integer paymentId, Connection con) throws Exception {
+    public Boolean delete(Integer paymentId, Connection con) throws Exception {
         Boolean isDeleted = false; // 삭제 여부 초기화
         PreparedStatement ps = null; // PreparedStatement 선언
         try {
