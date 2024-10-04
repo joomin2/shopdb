@@ -5,16 +5,34 @@ import edu.sm.exception.DuplicatedIdException;
 import edu.sm.service.ProductService;
 
 import java.sql.Date;
+import java.util.Scanner;
 
 public class ProductInsert {
     public static void main(String[] args) {
         ProductService productService = new ProductService();
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("=== 상품 등록 ===");
+        System.out.print("상품 이름을 입력하세요: ");
+        String productName = scanner.nextLine();
+        System.out.print("상품 가격을 입력하세요: ");
+        int productPrice = scanner.nextInt();
+        scanner.nextLine();  // 버퍼 비우기
+        System.out.print("상품 이미지를 입력하세요: ");
+        String productImg = scanner.nextLine();
+        System.out.print("카테고리 번호를 입력하세요: ");
+        int cateno = scanner.nextInt();
+        scanner.nextLine();  // 버퍼 비우기
+        System.out.print("상품 등록 날짜를 입력하세요 (YYYY-MM-DD): ");
+        String productDateStr = scanner.nextLine();
+        Date productDate = Date.valueOf(productDateStr);
+
         Product product = Product.builder()
-                .productName("joominitem2")
-                .productPrice(10000)
-                .productImg("joomintem.jpg")
-                .cateno(2)
-                .productDate(Date.valueOf("2022-03-01")) // java.sql.Date 사용
+                .productName(productName)
+                .productPrice(productPrice)
+                .productImg(productImg)
+                .cateno(cateno)
+                .productDate(productDate)
                 .build();
 
         try {

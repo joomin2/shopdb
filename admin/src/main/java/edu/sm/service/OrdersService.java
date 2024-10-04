@@ -1,8 +1,8 @@
 package edu.sm.service;
 
 import edu.sm.dao.OrdersDao; // OrdersDao 임포트
+import edu.sm.dto.MonthlySales;
 import edu.sm.dto.Orders; // Orders DTO 임포트
-import edu.sm.exception.DuplicatedIdException; // 중복 ID 예외 처리 클래스 임포트
 import edu.sm.frame.ConnectionPool; // ConnectionPool 임포트
 import java.sql.Connection;
 import java.sql.SQLException;
