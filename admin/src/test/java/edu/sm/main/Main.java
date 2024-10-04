@@ -111,7 +111,7 @@ public class Main {
 
     // 상품 관리
     private static void manageProducts() {
-        System.out.println("=== 상품 관리 ===");
+        System.out.println("==== 상품 관리 ====");
         System.out.println("1. 모든 상품 조회");
         System.out.println("2. 특정 상품 조회");
         System.out.println("3. 상품 추가");
