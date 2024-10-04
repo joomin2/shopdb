@@ -67,7 +67,7 @@ public class PaymentDao implements Dao<Integer, Payment> {
 
     // 결제 삭제 메서드
     @Override
-    public boolean delete(Integer paymentId, Connection con) throws Exception {
+    public Boolean delete(Integer paymentId, Connection con) throws Exception {
         Boolean isDeleted = false; // 삭제 여부 초기화
         PreparedStatement ps = null; // PreparedStatement 선언
         try {
